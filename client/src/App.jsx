@@ -6,8 +6,8 @@ import { ItemManagerProvider } from "./context/ItemManagerContex";
 const App = () => {
   useEffect(() => {
     let provider = window.ethereum;
-    if (provider) {
-      console.log(provider, " Provider from the app.js");
+    if (!provider) {
+      alert("Please install the metamask");
     }
   }, []);
 
