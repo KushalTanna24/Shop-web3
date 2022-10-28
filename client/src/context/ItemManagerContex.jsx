@@ -13,8 +13,156 @@ export const ItemManagerProvider = ({ children }) => {
 
   let web3 = new Web3("http://127.0.0.1:8545/");
   const itemMContract = new web3.eth.Contract(
-    itemManagerContract.abi,
-    itemManagerContract.networks[1666873916141].address
+    [
+      {
+        inputs: [
+          {
+            internalType: "string",
+            name: "_name",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "_price",
+            type: "uint256",
+          },
+        ],
+        name: "addNewItem",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+      },
+      {
+        inputs: [
+          {
+            internalType: "uint256",
+            name: "_index",
+            type: "uint256",
+          },
+        ],
+        name: "buy",
+        outputs: [],
+        stateMutability: "payable",
+        type: "function",
+      },
+      {
+        inputs: [
+          {
+            internalType: "uint256",
+            name: "_index",
+            type: "uint256",
+          },
+        ],
+        name: "deliver",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+      },
+      {
+        anonymous: false,
+        inputs: [
+          {
+            indexed: false,
+            internalType: "address",
+            name: "purchasedBy",
+            type: "address",
+          },
+          {
+            indexed: false,
+            internalType: "uint256",
+            name: "pricePaid",
+            type: "uint256",
+          },
+          {
+            indexed: false,
+            internalType: "string",
+            name: "itemName",
+            type: "string",
+          },
+          {
+            indexed: false,
+            internalType: "address",
+            name: "itemAddress",
+            type: "address",
+          },
+          {
+            indexed: false,
+            internalType: "uint256",
+            name: "deliveryState",
+            type: "uint256",
+          },
+          {
+            indexed: false,
+            internalType: "uint256",
+            name: "pice",
+            type: "uint256",
+          },
+        ],
+        name: "itemEvent",
+        type: "event",
+      },
+      {
+        inputs: [],
+        name: "isOwner",
+        outputs: [
+          {
+            internalType: "bool",
+            name: "",
+            type: "bool",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [
+          {
+            internalType: "uint256",
+            name: "",
+            type: "uint256",
+          },
+        ],
+        name: "items",
+        outputs: [
+          {
+            internalType: "contract Item",
+            name: "_item",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "price",
+            type: "uint256",
+          },
+          {
+            internalType: "enum ItemManager.deliveryStatus",
+            name: "state",
+            type: "uint8",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [],
+        name: "owner",
+        outputs: [
+          {
+            internalType: "address",
+            name: "",
+            type: "address",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+    ],
+    "0x77BC27145244Af7521Ce9FECE7c6D7f89668A265"
   );
   console.log(itemMContract);
 
@@ -35,20 +183,22 @@ export const ItemManagerProvider = ({ children }) => {
   };
 
   const addNewItem = async (name, price) => {
-    console.log(name, price);
-    const result = await itemMContract.methods
-      .addNewItem(name, price)
-      .send({ from: accounts[0] });
+    console.log(itemMContract.methods, "bruh=----------------------------");
+
+    const result = await itemMContract.methods.addNewItem(name, price).send({
+      from: "0x50993a4e81b20d698b1396347d599b5319c26925",
+      gas: 1500000,
+      gasPrice: "30000000000000",
+    });
 
     console.log(result, "------------------------ here");
     checkBalance(accounts);
   };
 
   const whoIsTheOwner = async () => {
-    const result = await itemMContract.methods
-      .owner()
-      .send({ from: accounts[0] });
+    const result = await itemMContract.methods.owner().call();
     console.log(result);
+    return result;
   };
 
   useEffect(() => {

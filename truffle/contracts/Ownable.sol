@@ -5,7 +5,12 @@ pragma solidity ^0.8;
 
 contract Ownable{
 
-    address owner;
+    address public owner;
+    
+    constructor() {
+        owner = msg.sender;
+    }
+
     modifier onlyOwner(){
         require (isOwner(), "Only owner allowed." );
         _;

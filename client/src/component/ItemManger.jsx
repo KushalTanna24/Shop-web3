@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useRef } from "react";
 import { ItemManagerContext } from "../context/ItemManagerContex";
 
 const ItemManger = () => {
+  const [owner, setOwner] = useState("");
   const {
     accounts,
     connectWallet,
@@ -14,17 +15,19 @@ const ItemManger = () => {
   } = useContext(ItemManagerContext);
 
   const nameRef = useRef("");
-  const priceRef = useRef("");
-
+  const priceRef = useRef(0);
   const whoIs = async () => {
-    whoIsTheOwner().then((owner) =>
-      console.log(owner, " <---- he is the owner")
-    );
+    let result = await whoIsTheOwner();
+    setOwner(result);
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    addNewItem(nameRef.current.value, priceRef.current.value);
+    const result = addNewItem(
+      nameRef.current.value,
+      parseInt(priceRef.current.value)
+    );
+    console.log(result, "kushal bhai here");
   };
 
   const fetchData = async () => {
@@ -36,6 +39,16 @@ const ItemManger = () => {
       <h1>Item manager</h1>
       <br />
       <button onClick={whoIs}>Who is owner</button>
+      <br />
+      <h2>
+        Owner of this smart contract is:
+        <span style={{ fontWeight: 100 }}>
+          <br />
+          {owner?.toLowerCase() === accounts[0]?.toLowerCase()
+            ? `you`
+            : `${owner}`}
+        </span>
+      </h2>
       <br />
       <br />
       <button onClick={connectWallet}>Connect</button>
