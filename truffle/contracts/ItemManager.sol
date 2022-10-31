@@ -18,8 +18,7 @@ contract ItemManager is Ownable{
 
     mapping(uint => structItem) public items;
 
-    uint itemIndex;
-    uint Kushal;
+    uint public itemIndex;
 
     event itemEvent(address purchasedBy, uint pricePaid, string itemName, address itemAddress , uint deliveryState, uint pice);
 
