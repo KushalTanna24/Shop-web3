@@ -81,9 +81,11 @@ export const ItemManagerProvider = ({ children }) => {
     const result = await itemMContract?.methods?.itemIndex().call();
     setLength(result);
     let array = [];
+    let index = 0;
     for (let i = 0; i < result; i++) {
       const result1 = await getData(i);
       array.push({
+        index: index++,
         name: result1.name,
         price: result1.price,
         state: result1.state,
@@ -98,6 +100,20 @@ export const ItemManagerProvider = ({ children }) => {
   const whoIsTheOwner = async () => {
     const result = await itemMContract?.methods?.owner()?.call();
     return result;
+  };
+
+  const deliverTheProduct = async (index) => {
+    try {
+      const result = await itemMContract?.methods
+        ?.deliver(index)
+        .send({ from: accounts[0] });
+      totalItems();
+    } catch (error) {
+      console.log(error);
+      alert(
+        "only owner can change the delivery state or product is yet to be sold"
+      );
+    }
   };
 
   useEffect(() => {
@@ -136,18 +152,6 @@ export const ItemManagerProvider = ({ children }) => {
     }
   };
 
-  const purchaseItem = async (addr, val) => {
-    const result = await itemMContract?.methods?.buy(addr).send({
-      from: accounts[0],
-    });
-    web3.eth.sendTransaction({
-      from: accounts[0],
-      to: addr,
-      value: web3.utils.toWei(val, "ether"),
-    });
-    console.log(result);
-  };
-
   return (
     <ItemManagerContext.Provider
       value={{
@@ -162,7 +166,7 @@ export const ItemManagerProvider = ({ children }) => {
         items,
         totalItems,
         length,
-        purchaseItem,
+        deliverTheProduct,
       }}
     >
       {children}

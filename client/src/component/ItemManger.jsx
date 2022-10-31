@@ -5,6 +5,7 @@ import { ItemManagerContext } from "../context/ItemManagerContex";
 
 const ItemManger = () => {
   const [owner, setOwner] = useState("");
+  const [itemIndex, setItemIndex] = useState();
   const {
     accounts,
     connectWallet,
@@ -15,7 +16,7 @@ const ItemManger = () => {
     length,
     totalItems,
     items,
-    purchaseItem,
+    deliverTheProduct,
   } = useContext(ItemManagerContext);
 
   const nameRef = useRef("");
@@ -36,11 +37,6 @@ const ItemManger = () => {
     0: "Created",
     1: "Purchased",
     2: "Delivered",
-  };
-
-  const deliverProduct = () => {};
-  const purchaseItemFunc = async (add, val) => {
-    const result = await purchaseItem(add, val);
   };
 
   return (
@@ -119,6 +115,9 @@ const ItemManger = () => {
                 align="left"
               >
                 <h2>
+                  Index: <span style={{ fontWeight: 100 }}>{item.index}</span>
+                </h2>
+                <h2>
                   Name: <span style={{ fontWeight: 100 }}>{item.name}</span>
                 </h2>
                 <h2>
@@ -135,12 +134,6 @@ const ItemManger = () => {
                     {delieveryState[item.state]}
                   </span>
                 </h2>
-                <button
-                  style={{ marginTop: "10px", width: "100%" }}
-                  onClick={() => purchaseItemFunc(item.address, item.price)}
-                >
-                  Buy
-                </button>
               </div>
             ))}
           </div>
@@ -209,11 +202,28 @@ const ItemManger = () => {
         <div style={{ width: "50%" }}>
           <h1>Deliver product</h1>
           <br />
-          <label style={{ fontSize: "15px" }}>Address </label>
-          <input type="text" style={{ width: "50%" }} />
+          <label style={{ fontSize: "15px" }}>Index </label>
+          <input
+            type="number"
+            style={{ width: "50%" }}
+            value={itemIndex}
+            onChange={(e) => setItemIndex(e.target.value)}
+          />
           <br />
           <br />
-          <button onClick={deliverProduct}>Deliver</button>
+          <button
+            onClick={() => {
+              if (items.some((item) => item.index == itemIndex)) {
+                deliverTheProduct(itemIndex);
+                setItemIndex("");
+              } else {
+                alert("no product exist with entered index");
+                setItemIndex("");
+              }
+            }}
+          >
+            Deliver
+          </button>
           <br />
         </div>
       </div>

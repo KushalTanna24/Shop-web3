@@ -31,7 +31,7 @@ contract ItemManager is Ownable{
     }
 
     function buy(uint _index) public payable{
-        require(items[_index].price == msg.value, "Only full payments accepted" );
+        // require(items[_index].price == msg.value, "Only full payments accepted" );
         require(items[_index].state == deliveryStatus.CREATED, "Sold out");
         items[_index].state = deliveryStatus.PAID;
         emit itemEvent(msg.sender, msg.value, items[_index].name, address(items[_index]._item),uint(items[_index].state), items[_index].price);
