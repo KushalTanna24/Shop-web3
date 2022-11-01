@@ -21,8 +21,8 @@ contract Item{  //item specific contraact so user can buy specific item.
     }
 
     receive() external payable{
-        require(pricePaid == 0, "item is paid already");
-        // require(price == msg.value, "Only full payment allowed");
+        require(pricePaid == 0, "item sold");
+        require(price == msg.value, "Only full payment allowed");
         pricePaid += msg.value;
         (bool success, ) = address(parentContract).call{value:msg.value}(abi.encodeWithSignature("buy(uint256)", index));
         require (success, "Transaction failed");

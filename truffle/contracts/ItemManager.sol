@@ -24,8 +24,8 @@ contract ItemManager is Ownable{
 
 
     function addNewItem(string memory _name, uint _price) public{
-        Item item  = new Item(this, _price, itemIndex, _name); // item will be smart contract holding data of that particular item.
-        items[itemIndex] = structItem(item,_name,_price, deliveryStatus.CREATED);
+        Item item  = new Item(this, _price*1e18, itemIndex, _name); // item will be smart contract holding data of that particular item.
+        items[itemIndex] = structItem(item,_name,_price*1e18, deliveryStatus.CREATED);
         emit itemEvent(address(0),0,items[itemIndex].name, address(item),uint(items[itemIndex].state), _price);
         itemIndex++;
     }

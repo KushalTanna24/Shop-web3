@@ -122,7 +122,9 @@ const ItemManger = () => {
                 </h2>
                 <h2>
                   Price:{" "}
-                  <span style={{ fontWeight: 100 }}>{item.price} ether</span>
+                  <span style={{ fontWeight: 100 }}>
+                    {item.price / 1e18} ether
+                  </span>
                 </h2>
                 <h2>
                   Address:{" "}
